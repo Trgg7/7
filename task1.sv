@@ -51,29 +51,23 @@ wire ram_r_addr;
 wire [15:0] datapath_out;
 //wire ram_r_data;
 
+assign out = datapath_out;
 
 
 
 always @(*) begin
 pc_add = keep_pc + 1'b1;
-
-next_pc= (clear_pc) ? start_pc : pc_add;
-
+next_pc = (clear_pc) ? start_pc : pc_add;
 ram_r_addr = (sel_addr)? keep_pc : data_address;
 ram_w_addr = (sel_addr)? keep_pc : data_address;
-
 end 
 
 
 
 always @(posedge clk) begin 
-
 keep_pc <= (load_pc) ? next_pc : keep_pc;
-
 instr <= (load_ir) ram_r_data : instr;
-
 data_address <= (load_addr) ? datapath_out[7:0] : data_address;
-
 end
 
 
