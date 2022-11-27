@@ -1,8 +1,8 @@
 module task1(input clk, input rst_n, input [7:0] start_pc, output[15:0] out);
 wire m_data;
-wire [15:0] instr;
-wire [7:0] next_pc;
-wire [7:0] pc_add;
+reg [15:0] instr;
+reg [7:0] next_pc;
+reg [7:0] pc_add;
 //wire [7:0] keep_pc;
 
 
@@ -17,8 +17,9 @@ wire[15:0] sximm8;
 wire[2:0] r_addr;
 //wire[2:0] w_addr;
 wire [7:0] ram_r_data;
-wire keep_pc;
+reg keep_pc;
 reg [1:0] wb_sel;
+
 
 //reg w_en;
 reg en_A;
@@ -28,7 +29,7 @@ reg en_status;
 reg sel_A;
 reg sel_B;
 
-wire [7:0] data_address;
+reg [7:0] data_address;
 
 //reg w_addr; 
 reg w_en;
@@ -42,11 +43,11 @@ wire waiting;
 wire clear_pc;
 wire load_pc;
 wire load_addr;
-wire ram_w_addr;
+reg ram_w_addr;
 wire sel_addr;
 wire load_ir;
 wire ram_w_en;
-wire ram_r_addr;
+reg ram_r_addr;
 //wire ram_w_addr;
 wire [15:0] datapath_out;
 //wire ram_r_data;
@@ -64,9 +65,9 @@ end
 
 
 
-always @(posedge clk) begin 
+always @(posedge clk) begin
 keep_pc <= (load_pc) ? next_pc : keep_pc;
-instr <= (load_ir) ram_r_data : instr;
+instr <= (load_ir) ? ram_r_data : instr;
 data_address <= (load_addr) ? datapath_out[7:0] : data_address;
 end
 
@@ -77,5 +78,4 @@ controller U02(clk, rst_n, start,opcode, ALU_op, shift_op,Z1, N1, V1,waiting,reg
 ram U03(clk, ram_w_en, ram_r_addr, ram_w_addr, datapath_out, ram_r_data);
 
 endmodule: task1
-
 
