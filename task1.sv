@@ -1,5 +1,4 @@
 module task1(input clk, input rst_n, input [7:0] start_pc, output[15:0] out);
-reg out;
 wire m_data;
 wire [15:0] instr;
 wire [7:0] next_pc;
