@@ -3,11 +3,11 @@ wire m_data;
 wire [15:0] instr;
 wire [7:0] next_pc;
 wire [7:0] pc_add;
-wire [7:0] keep_pc;
+//wire [7:0] keep_pc;
 
 
 
-reg instr;
+//reg instr;
 reg reg_sel;
 wire [2:0] opcode;
 wire[1:0] ALU_op;
@@ -15,12 +15,12 @@ wire [1:0] shift_op;
 wire[15:0] sximm5;
 wire[15:0] sximm8;
 wire[2:0] r_addr;
-wire[2:0] w_addr;
+//wire[2:0] w_addr;
 wire [7:0] ram_r_data;
 wire keep_pc;
 reg [1:0] wb_sel;
 
-reg w_en;
+//reg w_en;
 reg en_A;
 reg en_B;
 reg en_C;
@@ -28,11 +28,11 @@ reg en_status;
 reg sel_A;
 reg sel_B;
 
+wire [7:0] data_address;
 
-reg w_addr; 
+//reg w_addr; 
 reg w_en;
-wire r_addr;
-wire datapath_out;
+//wire r_addr;
 wire Z1;
 wire N1;
 wire V1;
@@ -47,15 +47,15 @@ wire sel_addr;
 wire load_ir;
 wire ram_w_en;
 wire ram_r_addr;
-wire ram_w_addr;
-wire datapath_out;
-wire ram_r_data;
+//wire ram_w_addr;
+wire [15:0] datapath_out;
+//wire ram_r_data;
 
 
 
 
 always @(*) begin
-pc_add = keep_pc + 1'b1
+pc_add = keep_pc + 1'b1;
 
 next_pc= (clear_pc) ? start_pc : pc_add;
 
@@ -79,7 +79,7 @@ end
 
 idecoder U00(instr, reg_sel, opcode, ALU_op, shift_op, sximm5,  sximm8, r_addr, w_addr);
 datapath U01(clk, ram_r_data, keep_pc, wb_sel, w_addr, w_en, r_addr, en_A,en_B, shift_op, sel_A,sel_B, ALU_op, en_C, en_status,sximm8, sximm5,datapath_out, Z1, N1, V1);
-controller U02(clk, rst_n, start,opcode, ALU_op, shift_op,Z1, N1, V1,waiting,reg_sel, wb_sel, w_en,en_A, en_B, en_C, en_status,sel_A, sel_B, clear_pc, load_pc, load_addr, ram_w_addr, sel_addr, load_ir));
+controller U02(clk, rst_n, start,opcode, ALU_op, shift_op,Z1, N1, V1,waiting,reg_sel, wb_sel, w_en,en_A, en_B, en_C, en_status,sel_A, sel_B, clear_pc, load_pc, load_addr, ram_w_addr, sel_addr, load_ir);
 ram U03(clk, ram_w_en, ram_r_addr, ram_w_addr, datapath_out, ram_r_data);
 
 endmodule: task1
