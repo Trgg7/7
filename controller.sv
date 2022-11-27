@@ -12,6 +12,7 @@
 `define movsh 4'b1001
 `define write 4'b1010
 `define load 4'b1011
+`define halt 4'b1100
 module controller(input clk, input rst_n, input start,
                   input [2:0] opcode, input [1:0] ALU_op, input [1:0] shift_op,
                   input Z, input N, input V,
@@ -33,6 +34,7 @@ case(state)
 `Initial : nxstate = (start)?`St:`Initial;
 `St : if({opcode,ALU_op} === 5'b11010)begin nxstate = `direct;end
 	else if({opcode,ALU_op} === 5'b11000||{opcode,ALU_op} === 5'b10111)begin nxstate = `single; end
+	else if(opcode === 3'b111)begin nxstate = `halt; end
 	else begin nxstate = `duo; end
 //`duo : nxstate = `duo1;
 `duo : nxstate = `single;
@@ -51,6 +53,8 @@ case(state)
 `movsh : nxstate = `load;
 `load : nxstate = `write;
 `write : nxstate = `Initial;
+`halt : nxstate = `halt;
+
 default : nxstate = `Initial;
 endcase
 end
@@ -76,6 +80,7 @@ end
 `movsh : {sel_A,sel_B,en_A,en_B,en_C,reg_sel} = 7'b1000101;
 `write : {reg_sel,w_en,en_A,en_B} = 5'b01100;
 `load : {reg_sel,en_A,en_B} = 4'b0000;
+`halt : {waiting,reg_sel,wb_sel,w_en,en_A,en_B,en_C,en_status,sel_A,sel_B} = 12'b000000000000;
 default : {waiting,reg_sel,wb_sel,w_en,en_A,en_B,en_C,en_status,sel_A,sel_B} = 12'b000000000000;
 endcase
 end
