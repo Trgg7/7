@@ -19,11 +19,14 @@ module controller(input clk, input rst_n, input start,
                   output reg waiting,
                   output reg [1:0] reg_sel, output reg [1:0] wb_sel, output reg w_en,
                   output reg en_A, output reg en_B, output reg en_C, output reg en_status,
-                  output reg sel_A, output reg sel_B);
+                  output reg sel_A, output reg sel_B,
+		  output reg clear_pc, output reg load_pc, output reg load_addr, output reg ram_w_addr, output reg sel_addr, output reg load_ir);
+reg waitreg;
 reg rst;
 wire [3:0] state;
 reg [3:0] nxstate;
 assign state = nxstate;
+assign waiting = waitreg;
 always @(posedge clk)begin
 
 if (~rst_n)begin 
@@ -47,14 +50,13 @@ case(state)
 	else if({opcode,ALU_op} === 5'b11000)begin nxstate = `movsh; end
 	else begin nxstate = `Initial; end
 `add : nxstate = `load;
-`cmp : nxstate = `load;
+`cmp : nxstate = `Initial;
 `aand : nxstate = `load;
 `mvn : nxstate = `load;
 `movsh : nxstate = `load;
+`halt : nxstate = `halt;
 `load : nxstate = `write;
 `write : nxstate = `Initial;
-`halt : nxstate = `halt;
-
 default : nxstate = `Initial;
 endcase
 end
@@ -64,8 +66,9 @@ end
 //end
 always @(*)begin 
 case(state)
-`Initial : {waiting,reg_sel,wb_sel,w_en,en_A,en_B,en_C,en_status,sel_A,sel_B} = 12'b100000000000;
-`St : {waiting,reg_sel,wb_sel,w_en,en_A,en_B,en_C,en_status,sel_A,sel_B} = 12'b000000000000;
+`Initial : {waitreg,reg_sel,wb_sel,w_en,en_A,en_B,en_C,en_status,sel_A,sel_B} = 12'b100000000000;
+`St : {waitreg,reg_sel,wb_sel,w_en,en_A,en_B,en_C,en_status,sel_A,sel_B} = 12'b000000000000;
+`halt : {waitreg,reg_sel,wb_sel,w_en,en_A,en_B,en_C,en_status,sel_A,sel_B} = 12'b000000000000;
 `direct : {w_en,reg_sel,wb_sel} =5'b11010;
 `single : {reg_sel,en_A,en_B} = 4'b0001;
 `duo : {reg_sel,en_A,en_B} = 4'b1010;
@@ -79,9 +82,8 @@ end
 `mvn :{sel_A,sel_B,en_A,en_B,en_C,reg_sel} = 7'b1000101;
 `movsh : {sel_A,sel_B,en_A,en_B,en_C,reg_sel} = 7'b1000101;
 `write : {reg_sel,w_en,en_A,en_B} = 5'b01100;
-`load : {reg_sel,en_A,en_B} = 4'b0000;
-`halt : {waiting,reg_sel,wb_sel,w_en,en_A,en_B,en_C,en_status,sel_A,sel_B} = 12'b000000000000;
-default : {waiting,reg_sel,wb_sel,w_en,en_A,en_B,en_C,en_status,sel_A,sel_B} = 12'b000000000000;
+`load : {reg_sel,en_A,en_B} = 4'b0100;
+default : {waitreg,reg_sel,wb_sel,w_en,en_A,en_B,en_C,en_status,sel_A,sel_B} = 12'b000000000000;
 endcase
 end
 
