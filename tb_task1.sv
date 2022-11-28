@@ -54,6 +54,13 @@ error = 1'b1;
 n_fail = n_fail +1;
 end
 
+  
+  
+$display("\n\n==== TEST SUMMARY ====");
+$display("  TEST COUNT: %-5d", n_pass + n_fail);
+$display("    - PASSED: %-5d", n_pass);
+$display("    - FAILED: %-5d", n_fail);
+$display("======================\n\n");
 
 end
 
