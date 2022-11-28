@@ -6,7 +6,7 @@ reg [7:0] start_pc;
 wire [15:0] out;
 
 reg error;
-assgin err = error;
+assign err = error;
 integer n_pass;
 integer n_fail;
 
@@ -20,7 +20,7 @@ n_fail=0;
 clk=0;
 rst_n=0;
 start_pc=8'd0;
-forever #5 clk=~clk
+forever #5 clk=~clk;
 #10;
 
 rst_n=1;
@@ -43,7 +43,7 @@ rst_n=1;
 
 #60;
 //3rd state finished
-end
+
 
 assert (out === 16'b0000_0000_0000_0001) begin
 $display("pass halt & fetch");
@@ -55,5 +55,6 @@ n_fail = n_fail +1;
 end
 
 
+end
 
 endmodule: tb_task1
