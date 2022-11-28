@@ -38,7 +38,6 @@ wire Z1;
 wire N1;
 wire V1;
 
-wire start;
 wire waiting;
 wire clear_pc;
 wire load_pc;
@@ -74,7 +73,7 @@ end
 
 idecoder U00(instr, reg_sel, opcode, ALU_op, shift_op, sximm5,  sximm8, r_addr, w_addr);
 datapath U01(clk, ram_r_data, keep_pc, wb_sel, w_addr, w_en, r_addr, en_A,en_B, shift_op, sel_A,sel_B, ALU_op, en_C, en_status,sximm8, sximm5,datapath_out, Z1, N1, V1);
-controller U02(clk, rst_n, start,opcode, ALU_op, shift_op,Z1, N1, V1,waiting,reg_sel, wb_sel, w_en,en_A, en_B, en_C, en_status,sel_A, sel_B, clear_pc, load_pc, load_addr, ram_w_addr, sel_addr, load_ir);
+controller U02(clk, rst_n,opcode, ALU_op, shift_op,Z1, N1, V1,waiting,reg_sel, wb_sel, w_en,en_A, en_B, en_C, en_status,sel_A, sel_B, clear_pc, load_pc, load_addr, ram_w_addr, sel_addr, load_ir);
 ram U03(clk, ram_w_en, ram_r_addr, ram_w_addr, datapath_out, ram_r_data);
 
 endmodule: task1
