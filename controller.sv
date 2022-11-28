@@ -55,7 +55,7 @@ else if (opcode === 3'b111) begin nxstate = `halt; end
 	else begin nxstate = `duo; end
 //`duo : nxstate = `duo1;
 `duo : nxstate = `single;
-`direct : nxstate = `Initial;
+`direct : nxstate = `transit;
 //`single : nxstate = `single1;
 `single : if({opcode,ALU_op} === 5'b10100)begin nxstate = `addand; end
 	else if({opcode,ALU_op} === 5'b10101)begin nxstate = `cmp; end
@@ -64,7 +64,7 @@ else if (opcode === 3'b111) begin nxstate = `halt; end
 	else if({opcode,ALU_op} === 5'b11000)begin nxstate = `movsh; end
 	else if({opcode,ALU_op} === 5'b01100)begin nxstate = `ldrstr;end
 	else if({opcode,ALU_op} == 5'b10000) begin nxstate = `ldrstr; end
-	else begin nxstate = `Initial; end
+	else begin nxstate = `transit; end
 `ldrstr : nxstate = `load;
 `load : begin
                      if({opcode, ALU_op} == 5'b01100) nxstate = `ldr;
@@ -74,13 +74,13 @@ else if (opcode === 3'b111) begin nxstate = `halt; end
 `str1: nxstate = `St;
 `ldr : nxstate = `write;
 `addand : nxstate = `write;
-`cmp : nxstate = `Initial;
+`cmp : nxstate = `transit;
 `movsh : nxstate = `write;
 
 `write : nxstate = `transit;
 
 `halt : nxstate = `halt;
-default : nxstate = `Initial;
+default : nxstate = `transit;
 endcase
 end
 end
