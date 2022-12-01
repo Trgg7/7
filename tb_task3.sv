@@ -1,4 +1,4 @@
-module tb_task1(output err);
+module tb_task3(output err);
   // your implementation here
 reg clk;
 reg rst_n;
@@ -10,7 +10,7 @@ assign err = error;
 integer n_pass;
 integer n_fail;
 
-task1 dut(.clk, .rst_n, .start_pc, .out);
+task3 dut(.clk, .rst_n, .start_pc, .out);
 always begin #5 clk=~clk; end
 initial begin
 error=0;
@@ -88,6 +88,34 @@ n_fail = n_fail +1;
 end
 //3rd state finished
 
+#180;
+//580
+assert (out === 16'b0000_0000_0000_0010) begin
+$display("pass ldr");
+n_pass = n_pass + 1;
+end else begin
+$error("fail str");
+error = 1'b1;
+n_fail = n_fail +1;
+end
+#60
+assert (out === 16'b0000_0000_0000_0101) begin
+$display("pass load str");
+n_pass = n_pass + 1;
+end else begin
+$error("fail load str");
+error = 1'b1;
+n_fail = n_fail +1;
+end
+#40
+assert (out === 16'b1100_0000_0010_1000) begin
+$display("pass store str");
+n_pass = n_pass + 1;
+end else begin
+$error("fail store str");
+error = 1'b1;
+n_fail = n_fail +1;
+end
 #100;
 $display("\n\n==== TEST SUMMARY ====");
 $display("  TEST COUNT: %-5d", n_pass + n_fail);
@@ -98,4 +126,4 @@ $display("======================\n\n");
 $stop;
 end
 
-endmodule: tb_task1
+endmodule: tb_task3

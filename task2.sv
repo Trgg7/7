@@ -19,7 +19,7 @@
 `define transit 5'b11110
 `define St1 5'b10000
 `define strwrite 5'b10001
-module task1(input clk, input rst_n, input [7:0] start_pc, output[15:0] out);
+module task2(input clk, input rst_n, input [7:0] start_pc, output[15:0] out);
 wire m_data;
 reg [15:0] instr;
 reg [7:0] next_pc;
@@ -99,7 +99,7 @@ controller U02(clk, rst_n,opcode, ALU_op, shift_op,Z1, N1, V1,waiting,reg_sel, w
 
 ram U03(clk, ram_w_en, ram_r_addr, ram_r_addr, datapath_out, ram_r_data);
 
-endmodule: task1
+endmodule: task2
 
 
 module controller(input clk, input rst_n, input [2:0] opcode, input [1:0] ALU_op, input [1:0] shift_op,
@@ -148,7 +148,7 @@ case(state)
 	else if({opcode,ALU_op} === 5'b10110)begin nxstate = `addand; end
 	else if({opcode,ALU_op} === 5'b10111)begin nxstate = `movsh; end
 	else if({opcode,ALU_op} === 5'b11000)begin nxstate = `movsh; end
-	//else if({opcode,ALU_op} === 5'b01100)begin nxstate = `ldrstr;end
+	else if({opcode,ALU_op} === 5'b01100)begin nxstate = `ldrstr;end
 	//else if({opcode,ALU_op} == 5'b10000) begin nxstate = `ldrstr; end
 	else begin nxstate = `Initial; end
 `ldrstr : nxstate = `load;
